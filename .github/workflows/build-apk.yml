@@ -1,0 +1,36 @@
+name: APK Olustur
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Projeyi al
+        uses: actions/checkout@v4
+
+      - name: Java 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Gradle ayarla
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Gradle izin ver
+        run: chmod +x gradlew
+
+      - name: APK olustur
+        run: ./gradlew assembleDebug
+
+      - name: APK dosyasini yukle
+        uses: actions/upload-artifact@v4
+        with:
+          name: Firsat-Al-Sat-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
